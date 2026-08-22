@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lina Labidi — Explainable AI &amp; Clinical ML</title>
+<meta name="description" content="Portfolio of Lina Labidi — research in explainable AI, clinical machine learning, and hyperparameter optimization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7FC;
+    --panel:#FFFFFF;
+    --panel-hi:#FDFBFF;
+    --line:#E8E6F1;
+    --text:#292D42;
+    --muted:#787D97;
+    --coral:#E88C6E;
+    --coral-deep:#D97A5E;
+    --teal:#2E4E8C;
+    --teal-tint:rgba(46,78,140,0.12);
+    --coral-tint:rgba(232,140,110,0.14);
+    --radius:12px;
+    --shadow: 0 10px 30px rgba(41,45,66,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 32px; position:relative; z-index:1;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(248,247,252,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand{ font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600; text-decoration:none; }
+  .brand span{color:var(--coral-deep);}
+  .navlinks{display:flex; gap:28px; align-items:center;}
+  .navlinks a{ text-decoration:none; color:var(--muted); font-size:0.88rem; letter-spacing:0.02em; transition:color .2s; }
+  .navlinks a:hover{color:var(--text);}
+  .cv-btn{
+    border:1px solid var(--line); background:var(--panel);
+    padding:8px 16px; border-radius:999px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+    text-decoration:none; color:var(--text);
+    transition:border-color .2s, color .2s;
+    white-space:nowrap;
+  }
+  .cv-btn:hover{border-color:var(--coral-deep); color:var(--coral-deep);}
+  @media (max-width:760px){ .navlinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; overflow:hidden; padding:88px 0 80px; border-bottom:1px solid var(--line); }
+  .hero::before{
+    content:''; position:absolute; width:520px; height:520px; border-radius:50%;
+    background:var(--coral); opacity:0.16; filter:blur(100px); top:-160px; right:-100px; z-index:0;
+  }
+  .hero::after{
+    content:''; position:absolute; width:440px; height:440px; border-radius:50%;
+    background:var(--teal); opacity:0.14; filter:blur(100px); bottom:-180px; left:-120px; z-index:0;
+  }
+  .hero .wrap{ display:block; }
+  @media (max-width:860px){ .hero{padding:56px 0 56px;} }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--teal); margin-bottom:18px; display:block;
+  }
+  .hero h1{ font-size:clamp(2.1rem, 4.6vw, 3.4rem); line-height:1.08; }
+  .hero h1 em{ font-style:italic; color:var(--coral-deep); }
+  .hero p.subhead{ font-family:'Fraunces', serif; font-weight:500; font-size:1.22rem; color:var(--text); max-width:42ch; margin-top:20px; line-height:1.4; }
+  .hero p.lede{ color:var(--muted); font-size:1.05rem; max-width:46ch; margin-top:14px; }
+  .hero .roles{ margin-top:28px; display:flex; gap:10px; flex-wrap:wrap; }
+  .pill{
+    font-family:'IBM Plex Mono', monospace; font-size:0.74rem; padding:6px 12px;
+    border:1px solid var(--line); background:var(--panel); border-radius:999px; color:var(--muted);
+  }
+  .hero-ctas{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--teal); color:#FFFFFF; padding:12px 22px; border-radius:8px;
+    text-decoration:none; font-weight:600; font-size:0.92rem;
+    transition:transform .15s, box-shadow .15s; display:inline-block;
+  }
+  .btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(46,78,140,0.35);}
+  .btn-ghost{
+    border:1px solid var(--line); background:var(--panel); padding:12px 22px; border-radius:8px;
+    text-decoration:none; font-size:0.92rem; color:var(--text); transition:border-color .15s, color .15s;
+  }
+  .btn-ghost:hover{border-color:var(--teal); color:var(--teal);}
+
+  /* signature: personal milestone badge */
+  .badge-card{
+    position:relative;
+    background:linear-gradient(165deg, #FFFFFF 0%, #FDF3EE 100%);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:32px 30px;
+    box-shadow:var(--shadow);
+  }
+  .badge-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:0.7rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--coral-deep); display:block; margin-bottom:10px;
+  }
+  .badge-stat{ font-family:'Fraunces', serif; font-size:3.2rem; font-weight:600; color:var(--coral-deep); line-height:1; }
+  .badge-stat-label{ font-size:0.98rem; color:var(--text); margin-top:8px; max-width:22ch; }
+  .badge-divider{ height:1px; background:var(--line); margin:22px 0; }
+  .badge-role{ font-weight:600; font-size:0.92rem; }
+  .badge-desc{ color:var(--muted); font-size:0.87rem; margin-top:6px; }
+  .badge-resume{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:18px; font-family:'IBM Plex Mono', monospace; font-size:0.8rem;
+    color:var(--teal); text-decoration:none; border-bottom:1px solid transparent; transition:border-color .15s;
+  }
+  .badge-resume:hover{ border-color:var(--teal); }
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:76px 0;}
+  section + section{border-top:1px solid var(--line);}
+  .section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:44px; flex-wrap:wrap; }
+  .section-head h2{font-size:clamp(1.5rem, 3vw, 2.1rem);}
+  .section-num{ font-family:'IBM Plex Mono', monospace; color:var(--muted); font-size:0.8rem; }
+  .section-intro{color:var(--muted); max-width:60ch; margin-top:10px;}
+
+  /* education block */
+  .edu-institution{ font-size:1.25rem; margin-bottom:22px; }
+  .edu-row{
+    display:flex; justify-content:space-between; align-items:baseline; gap:20px;
+    padding:20px 0; border-top:1px solid var(--line);
+  }
+  .edu-row:last-child{border-bottom:1px solid var(--line);}
+  .edu-degree{font-size:0.98rem;}
+  .edu-date{ font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--muted); white-space:nowrap; }
+  @media (max-width:600px){ .edu-row{flex-direction:column; gap:6px;} }
+
+  /* filters */
+  .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:36px;}
+  .filter-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:0.76rem; padding:7px 14px; border-radius:999px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted); cursor:pointer; transition:all .15s;
+  }
+  .filter-btn:hover{color:var(--text); border-color:var(--text);}
+  .filter-btn.active{ background:var(--coral); border-color:var(--coral); color:#2A1B14; font-weight:500; }
+
+  /* project grid */
+  .grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+  @media (max-width:920px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr;} }
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; display:flex; flex-direction:column; gap:12px;
+    transition:transform .18s, border-color .18s, box-shadow .18s;
+  }
+  .card:hover{ transform:translateY(-3px); border-color:rgba(232,140,110,0.4); box-shadow:var(--shadow); }
+  .card h3{font-size:1.02rem; font-weight:500; line-height:1.3;}
+  .card p{color:var(--muted); font-size:0.87rem; flex-grow:1;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{ font-family:'IBM Plex Mono', monospace; font-size:0.68rem; color:var(--teal); background:var(--teal-tint); padding:3px 8px; border-radius:5px; }
+  .card.hide{display:none;}
+
+  /* publications */
+  .pub{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding:20px 0; border-top:1px solid var(--line); }
+  .pub:last-child{border-bottom:1px solid var(--line);}
+  .pub h3{font-size:1rem; font-weight:500; margin-bottom:6px;}
+  .pub .meta{color:var(--muted); font-size:0.85rem;}
+  .pub .badge{
+    font-family:'IBM Plex Mono', monospace; font-size:0.68rem; white-space:nowrap;
+    padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--coral-tint); color:var(--coral-deep); height:fit-content;
+  }
+  @media (max-width:600px){ .pub{flex-direction:column;} }
+
+  /* skills */
+  .skillgroups{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+  @media (max-width:640px){ .skillgroups{grid-template-columns:1fr;} }
+  .skillgroup h4{
+    font-family:'IBM Plex Mono', monospace; font-size:0.75rem; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--muted); margin-bottom:12px;
+  }
+  .skillgroup .tags .tag{color:var(--text); background:var(--panel); border:1px solid var(--line);}
+
+  /* footer */
+  footer{padding:56px 0 40px;}
+  .footer-grid{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  footer h2{font-size:clamp(1.5rem,3.4vw,2.2rem); max-width:20ch;}
+  .footer-links{display:flex; gap:18px; flex-wrap:wrap;}
+  .footer-links a{
+    text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px;
+    font-size:0.92rem; color:var(--muted); transition:color .15s, border-color .15s;
+  }
+  .footer-links a:hover{color:var(--coral-deep); border-color:var(--coral-deep);}
+  .copyright{margin-top:40px; color:var(--muted); font-size:0.78rem; font-family:'IBM Plex Mono', monospace;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand">Lina Labidi <span>·</span></a>
+    <div class="navlinks">
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
+      <a href="#contact">Contact</a>
+      <a class="cv-btn" href="2026_Lina_Labidi_Resume.pdf" target="_blank" rel="noopener">Resume ↓</a>
+    </div>
+  </nav>
+</header>
+
+<section id="top" class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Explainable AI · ML Pipelines · Critical Systems · Interpretability · Research Enthusiast &amp; Active in Associative Life</span>
+      <h1>Building AI<br>you can <em>audit</em>.</h1>
+      <p class="subhead">Architecting scalable, explainable machine learning frameworks from research to production.</p>
+      <p class="lede">I'm Lina, specialized in automated hyperparameter optimization, cluster-enriched pipelines, and critical systems.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#projects">Explore my portfolio</a>
+        <a class="btn-ghost" href="mailto:linalabidi@ieee.org">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">01 / Education</span>
+        <h2 style="margin-top:8px;">Academic foundation</h2>
+      </div>
+    </div>
+
+    <h3 class="edu-institution">Higher Institute Of Computer Science Tunis El Manar</h3>
+    <div class="edu-row">
+      <span class="edu-degree">Research Master in Software Engineering — Ranked 1st in my cohort (Laureate)</span>
+      <span class="edu-date">2024 – July 2026</span>
+    </div>
+    <div class="edu-row">
+      <span class="edu-degree">Bachelor in Computer Science</span>
+      <span class="edu-date">2021 – 2024</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">02 / Projects</span>
+        <h2 style="margin-top:8px;">More projects, experiments &amp; builds</h2>
+        <p class="section-intro">From clinical diagnostics to safety-critical systems, every project here shares the same throughline: making machine learning explainable, interpretable, and safe enough to trust in production.</p>
+      </div>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="healthcare">Healthcare AI</button>
+      <button class="filter-btn" data-filter="xai">XAI</button>
+      <button class="filter-btn" data-filter="security">Security</button>
+      <button class="filter-btn" data-filter="systems">Systems</button>
+    </div>
+
+    <div class="grid" id="projectGrid">
+
+      <div class="card" data-tags="healthcare xai">
+        <h3>Ontology-Enhanced Breast Cancer Classification</h3>
+        <p>Semantic enrichment pipeline using the NCI Thesaurus (NCIT), evaluating SVM, RF and KNN across Grid Search, Genetic Algorithms, Bayesian and Optuna optimization for improved diagnostic robustness.</p>
+        <div class="tags"><span class="tag">NCIT</span><span class="tag">SVM/RF/KNN</span><span class="tag">Optuna</span></div>
+      </div>
+
+      <div class="card" data-tags="security xai">
+        <h3>CyberTest — AI Intrusion Detection Engine</h3>
+        <p>ML pipeline on NSL-KDD with Bayesian-tuned XGBoost, LIME explanations for instance-level intrusion insights, and an interactive real-time packet monitoring interface.</p>
+        <div class="tags"><span class="tag">XGBoost</span><span class="tag">LIME</span><span class="tag">Optuna</span></div>
+      </div>
+
+      <div class="card" data-tags="healthcare">
+        <h3>Lung Image Classification for COVID-19</h3>
+        <p>HOG, LBP and Haralick feature extraction feeding RF, KNN and SVM classifiers, with full EDA and hyperparameter tuning for diagnostic accuracy.</p>
+        <div class="tags"><span class="tag">HOG/LBP</span><span class="tag">Scikit-learn</span></div>
+      </div>
+
+      <div class="card" data-tags="systems">
+        <h3>V2I Speed Control for VANETs</h3>
+        <p>Formal verification of a speed-control mechanism for Vehicle-to-Infrastructure networks using timed automata in UPPAAL — validated for safety, liveness, and deadlock-freedom.</p>
+        <div class="tags"><span class="tag">UPPAAL</span><span class="tag">Formal Verification</span></div>
+      </div>
+
+      <div class="card" data-tags="systems">
+        <h3>Multi-Agent Smart Home Energy Management</h3>
+        <p>Reactive, semi-cognitive and cognitive agents in NetLogo modeling distributed decisions for renewable energy generation, storage, and emergency load prioritization.</p>
+        <div class="tags"><span class="tag">NetLogo</span><span class="tag">Multi-Agent</span></div>
+      </div>
+
+      <div class="card" data-tags="systems">
+        <h3>Real-Time Traffic Object Detection</h3>
+        <p>Minimalist YOLOv8/PyTorch pipeline detecting vehicles, pedestrians and traffic signs — inspired by assistive tech for visually impaired individuals.</p>
+        <div class="tags"><span class="tag">YOLOv8</span><span class="tag">PyTorch</span></div>
+      </div>
+
+      <div class="card" data-tags="systems">
+        <h3>Network Audit System</h3>
+        <p>Designed and configured a network architecture in Cisco Packet Tracer, implementing routing and security auditing features.</p>
+        <div class="tags"><span class="tag">Packet Tracer</span><span class="tag">Networking</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">03 / Publications</span>
+        <h2 style="margin-top:8px;">Papers &amp; submissions</h2>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div>
+        <h3>Cluster-based supervised learning for early diabetes prediction</h3>
+        <p class="meta">Biomedical Signal Processing and Control · 2nd author</p>
+      </div>
+      <span class="badge">Submitted</span>
+    </div>
+    <div class="pub">
+      <div>
+        <h3>Transparent AI and explainability for medical datasets</h3>
+        <p class="meta">ICAART · Contributor, extended version</p>
+      </div>
+      <span class="badge">Submitted</span>
+    </div>
+    <div class="pub">
+      <div>
+        <h3>Generative AI: a literature review</h3>
+        <p class="meta">ICCAD · Sole author</p>
+      </div>
+      <span class="badge">Accepted</span>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">04 / Toolkit</span>
+        <h2 style="margin-top:8px;">What I build with</h2>
+      </div>
+    </div>
+    <div class="skillgroups">
+      <div class="skillgroup">
+        <h4>Programming Languages</h4>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">R</span><span class="tag">SQL</span>
+          <span class="tag">Matlab</span><span class="tag">C#</span><span class="tag">C++</span><span class="tag">PHP</span>
+        </div>
+      </div>
+      <div class="skillgroup">
+        <h4>Frameworks &amp; Libraries</h4>
+        <div class="tags">
+          <span class="tag">TensorFlow</span><span class="tag">PyTorch</span><span class="tag">SciPy</span>
+          <span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">Scikit-learn</span>
+          <span class="tag">OpenCV</span><span class="tag">YOLOv8</span><span class="tag">Bootstrap</span>
+        </div>
+      </div>
+      <div class="skillgroup">
+        <h4>Web Development</h4>
+        <div class="tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+          <span class="tag">ReactJS</span><span class="tag">NodeJS</span><span class="tag">Angular</span>
+          <span class="tag">SharePoint SPFx</span>
+        </div>
+      </div>
+      <div class="skillgroup">
+        <h4>Database Management</h4>
+        <div class="tags">
+          <span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">Microsoft Graph API</span>
+        </div>
+      </div>
+      <div class="skillgroup">
+        <h4>Tools &amp; Platforms</h4>
+        <div class="tags">
+          <span class="tag">Git/GitHub</span><span class="tag">LaTeX</span><span class="tag">Google Scholar</span>
+          <span class="tag">Google Colab</span><span class="tag">Cisco Packet Tracer</span><span class="tag">Jupyter Notebook</span>
+        </div>
+      </div>
+      <div class="skillgroup">
+        <h4>Certifications &amp; Courses</h4>
+        <div class="tags">
+          <span class="tag">Fundamentals of Deep Learning — NVIDIA</span>
+          <span class="tag">Data Science Tools — IBM</span>
+          <span class="tag">Data Science Methodology — IBM</span>
+          <span class="tag">Build Your Own Chatbot — IBM (Ongoing)</span>
+          <span class="tag">Generative AI with Diffusion Models — NVIDIA (Ongoing)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <h2>Let's talk research, ideas, or opportunities.</h2>
+      <div class="footer-links">
+        <a href="mailto:linalabidi@ieee.org">linalabidi@ieee.org</a>
+        <a href="mailto:lina.labidi@etudiant-isi.utm.tn">lina.labidi@etudiant-isi.utm.tn</a>
+        <a href="https://linkedin.com/in/labidi-lina" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="2026_Lina_Labidi_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Lina Labidi — built with plain HTML, hosted on GitHub Pages.</div>
+  </div>
+</footer>
+
+<script>
+  // project filters
+  (function(){
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('#projectGrid .card');
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(card=>{
+          const tags = card.dataset.tags.split(' ');
+          card.classList.toggle('hide', f!=='all' && !tags.includes(f));
+        });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
